@@ -54,10 +54,18 @@ while True:
     if not computer:
         print('Status: The game is over. The computer won!')
         break
-    elif not player:
+    if not player:
         print('Status: The game is over. You won!')
         break
-    elif status == 'player':
+    if snake[0][0] == snake[-1][-1]:
+        flat_snake = []
+        for i, j in snake:
+            flat_snake.append(i)
+            flat_snake.append(j)
+        if flat_snake.count(flat_snake[0]) == 8:
+            print("Status: The game is over. It's a draw!")
+            break
+    if status == 'player':
         print("Status: It's your turn to make a move. Enter your command.")
         while True:
             move = input()
@@ -66,9 +74,6 @@ while True:
                     if abs(int(move)) == 0:
                         if stock:
                             player.append(stock.pop(random.choice(range(len(stock)))))
-                        else:
-                            print('Stock is empty! Please, try again.')
-                            continue
                     elif move.startswith('-'):
                         snake.insert(0, player.pop(abs(int(move))-1))
                     else:
