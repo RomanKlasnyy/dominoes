@@ -75,9 +75,23 @@ while True:
                         if stock:
                             player.append(stock.pop(random.choice(range(len(stock)))))
                     elif move.startswith('-'):
-                        snake.insert(0, player.pop(abs(int(move))-1))
+                        if snake[0][0] in player[abs(int(move))-1]:
+                            if player[abs(int(move))-1][1] == snake[0][0]:
+                                snake.insert(0, player.pop(abs(int(move))-1))
+                            else:
+                                snake.insert(0, list(reversed(player.pop(abs(int(move))-1))))
+                        else:
+                            print('Illegal move. Please try again.')
+                            continue
                     else:
-                        snake.append(player.pop(abs(int(move))-1))
+                        if snake[-1][-1] in player[(int(move))-1]:
+                            if snake[-1][-1] == player[(int(move))-1][0]:
+                                snake.append(player.pop((int(move))-1))
+                            else:
+                                snake.append(list(reversed(player.pop((int(move))-1))))
+                        else:
+                            print('Illegal move. Please try again.')
+                            continue
                     status = 'computer'
                     break
                 else:
@@ -86,12 +100,26 @@ while True:
                 print('Invalid input. Please try again.')
     elif status == 'computer':
         input('Status: Computer is about to make a move. Press Enter to continue...')
-        move = random.randint(-len(computer), len(computer))
-        if move == 0:
-            if stock:
-                computer.append(stock.pop(random.choice(range(len(stock)))))
-        elif move < 0:
-            snake.insert(0, computer.pop(abs(move)-1))
-        else:
-            snake.append(computer.pop(abs(move)-1))
-        status = 'player'
+        while True:
+            move = random.randint(-len(computer), len(computer))
+            if move == 0:
+                if stock:
+                    computer.append(stock.pop(random.choice(range(len(stock)))))
+            elif move < 0:
+                if snake[0][0] in computer[abs(move)-1]:
+                    if computer[abs(move)-1][1] == snake[0][0]:
+                        snake.insert(0, computer.pop(abs(move)-1))
+                    else:
+                        snake.insert(0, list(reversed(computer.pop(abs(move)-1))))
+                else:
+                    continue
+            else:
+                if snake[-1][-1] in computer[move-1]:
+                    if snake[-1][-1] == computer[move-1][0]:
+                        snake.append(computer.pop(move-1))
+                    else:
+                        snake.append(list(reversed(computer.pop(move-1))))
+                else:
+                    continue
+            status = 'player'
+            break
